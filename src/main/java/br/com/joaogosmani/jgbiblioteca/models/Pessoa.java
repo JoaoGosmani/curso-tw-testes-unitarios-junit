@@ -12,6 +12,11 @@ public abstract class Pessoa {
 
     public Pessoa() {}
 
+    public Pessoa(String nome, LocalDate dataNascimento) {
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+    }
+
     public Pessoa(Long id, String nome, LocalDate dataNascimento) {
         this.id = id;
         this.nome = nome;
