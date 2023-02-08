@@ -26,6 +26,8 @@ public class Autor extends Pessoa {
         this.dataFalecimento = dataFalecimento;
     }
 
-    
+    public boolean estaVivo() {
+        return dataFalecimento == null;
+    }
 
 }
