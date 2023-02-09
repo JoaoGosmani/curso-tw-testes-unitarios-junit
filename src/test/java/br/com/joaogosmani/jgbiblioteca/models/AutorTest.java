@@ -1,6 +1,6 @@
 package br.com.joaogosmani.jgbiblioteca.models;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 
@@ -14,7 +14,7 @@ public class AutorTest {
 
         var estaVivo = autor.estaVivo();
 
-        assertEquals(true, estaVivo);
+        assertTrue(estaVivo);
     }
 
     @Test
@@ -24,7 +24,7 @@ public class AutorTest {
 
         var estaVivo = autor.estaVivo();
 
-        assertEquals(false, estaVivo);
+        assertFalse(estaVivo);
     }
 
 }
