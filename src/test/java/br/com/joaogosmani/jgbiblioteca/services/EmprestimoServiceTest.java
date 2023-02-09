@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import br.com.joaogosmani.jgbiblioteca.enums.Reputacao;
@@ -16,10 +17,16 @@ import br.com.joaogosmani.jgbiblioteca.models.Cliente;
 import br.com.joaogosmani.jgbiblioteca.models.Obra;
 
 public class EmprestimoServiceTest {
+
+    private EmprestimoService emprestimoService;
+
+    @BeforeEach
+    private void setUp() {
+        emprestimoService = new EmprestimoService();
+    }
     
     @Test
     void quandoMetodoNovoForChamadoDeveRetornarUmEmprestimo() {
-        var emprestimoService = new EmprestimoService();
         var cliente = new Cliente(1L, "Cliente teste", LocalDate.now(), "123.123.123-11", Reputacao.REGULAR);
         var autor = new Autor(1L, "Autor teste", LocalDate.now(), null);
         var obra = new Obra(1L, "Obra teste", 100, Tipo.LIVRO, autor);
@@ -34,7 +41,6 @@ public class EmprestimoServiceTest {
 
     @Test
     void quandoMetodoNovoForChamadoComClienteDeReputaçãoRuimDeveRetornarUmEmprestimoComDevolucaoParaUmDia() {
-        var emprestimoService = new EmprestimoService();
         var cliente = new Cliente(1L, "Cliente teste", LocalDate.now(), "123.123.123-11", Reputacao.RUIM);
         var autor = new Autor(1L, "Autor teste", LocalDate.now(), null);
         var obra = new Obra(1L, "Obra teste", 100, Tipo.LIVRO, autor);
@@ -46,7 +52,6 @@ public class EmprestimoServiceTest {
 
     @Test
     void quandoMetodoNovoForChamadoComClienteDeReputaçãoRegularDeveRetornarUmEmprestimoComDevolucaoParaTresDia() {
-        var emprestimoService = new EmprestimoService();
         var cliente = new Cliente(1L, "Cliente teste", LocalDate.now(), "123.123.123-11", Reputacao.REGULAR);
         var autor = new Autor(1L, "Autor teste", LocalDate.now(), null);
         var obra = new Obra(1L, "Obra teste", 100, Tipo.LIVRO, autor);
@@ -58,7 +63,6 @@ public class EmprestimoServiceTest {
 
     @Test
     void quandoMetodoNovoForChamadoComClienteDeReputaçãoBoaDeveRetornarUmEmprestimoComDevolucaoParaCincoDia() {
-        var emprestimoService = new EmprestimoService();
         var cliente = new Cliente(1L, "Cliente teste", LocalDate.now(), "123.123.123-11", Reputacao.BOA);
         var autor = new Autor(1L, "Autor teste", LocalDate.now(), null);
         var obra = new Obra(1L, "Obra teste", 100, Tipo.LIVRO, autor);
@@ -70,7 +74,6 @@ public class EmprestimoServiceTest {
 
     @Test
     void quandoMetodoNovoForChamadoComObraNuloDeveLancarUmaExcecaoDoTipoillegalArgumentException() {
-        var emprestimoService = new EmprestimoService();
         var cliente = new Cliente(1L, "Cliente teste", LocalDate.now(), "123.123.123-11", Reputacao.REGULAR);
         var mensagemEsperada = "Obras não pode ser nulo e nem vazio";
 
@@ -80,7 +83,6 @@ public class EmprestimoServiceTest {
 
     @Test
     void quandoMetodoNovoForChamadoComObraVaziaDeveLancarUmaExcecaoDoTipoillegalArgumentException() {
-        var emprestimoService = new EmprestimoService();
         var cliente = new Cliente(1L, "Cliente teste", LocalDate.now(), "123.123.123-11", Reputacao.REGULAR);
         var obras = new ArrayList<Obra>();
         var mensagemEsperada = "Obras não pode ser nulo e nem vazio";
@@ -91,7 +93,6 @@ public class EmprestimoServiceTest {
 
     @Test
     void quandoMetodoNovoForChamadoComClienteNuloDeveLancarUmaExcecaoDoTipoillegalArgumentException() {
-        var emprestimoService = new EmprestimoService();
         var autor = new Autor(1L, "Autor teste", LocalDate.now(), null);
         var obra = new Obra(1L, "Obra teste", 100, Tipo.LIVRO, autor);
         var mensagemEsperada = "Cliente não pode ser nulo";
