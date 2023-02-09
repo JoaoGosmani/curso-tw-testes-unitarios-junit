@@ -1,8 +1,10 @@
 package br.com.joaogosmani.jgbiblioteca.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -64,6 +66,38 @@ public class EmprestimoServiceTest {
         var emprestimo = emprestimoService.novo(cliente, List.of(obra));
 
         assertEquals(LocalDate.now().plusDays(5), emprestimo.getDataDevolucao());
+    }
+
+    @Test
+    void quandoMetodoNovoForChamadoComObraNuloDeveLancarUmaExcecaoDoTipoillegalArgumentException() {
+        var emprestimoService = new EmprestimoService();
+        var cliente = new Cliente(1L, "Cliente teste", LocalDate.now(), "123.123.123-11", Reputacao.REGULAR);
+        var mensagemEsperada = "Obras não pode ser nulo e nem vazio";
+
+        var exception = assertThrows(IllegalArgumentException.class, () -> emprestimoService.novo(cliente, null));
+        assertEquals(mensagemEsperada, exception.getMessage());
+    }
+
+    @Test
+    void quandoMetodoNovoForChamadoComObraVaziaDeveLancarUmaExcecaoDoTipoillegalArgumentException() {
+        var emprestimoService = new EmprestimoService();
+        var cliente = new Cliente(1L, "Cliente teste", LocalDate.now(), "123.123.123-11", Reputacao.REGULAR);
+        var obras = new ArrayList<Obra>();
+        var mensagemEsperada = "Obras não pode ser nulo e nem vazio";
+
+        var exception = assertThrows(IllegalArgumentException.class, () -> emprestimoService.novo(cliente, obras));
+        assertEquals(mensagemEsperada, exception.getMessage());
+    }
+
+    @Test
+    void quandoMetodoNovoForChamadoComClienteNuloDeveLancarUmaExcecaoDoTipoillegalArgumentException() {
+        var emprestimoService = new EmprestimoService();
+        var autor = new Autor(1L, "Autor teste", LocalDate.now(), null);
+        var obra = new Obra(1L, "Obra teste", 100, Tipo.LIVRO, autor);
+        var mensagemEsperada = "Cliente não pode ser nulo";
+
+        var exception = assertThrows(IllegalArgumentException.class, () -> emprestimoService.novo(null, List.of(obra)));
+        assertEquals(mensagemEsperada, exception.getMessage());
     }
 
 }
