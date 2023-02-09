@@ -48,11 +48,11 @@ public class Emprestimo {
         this.cliente = cliente;
     }
 
-    public List<Obra> getLivros() {
+    public List<Obra> getObras() {
         return obras;
     }
 
-    public void setLivros(List<Obra> obras) {
+    public void setObras(List<Obra> obras) {
         this.obras = obras;
     }
 
