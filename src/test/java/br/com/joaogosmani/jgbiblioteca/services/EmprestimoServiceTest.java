@@ -24,10 +24,46 @@ public class EmprestimoServiceTest {
 
         var emprestimo = emprestimoService.novo(cliente, List.of(obra));
 
-        assertEquals(emprestimo.getCliente(), cliente);
-        assertEquals(emprestimo.getObras(), List.of(obra));
-        assertEquals(emprestimo.getDataEmprestimo(), LocalDate.now());
-        assertEquals(emprestimo.getDataDevolucao(), LocalDate.now().plusDays(3));
+        assertEquals(cliente, emprestimo.getCliente());
+        assertEquals(List.of(obra), emprestimo.getObras());
+        assertEquals(LocalDate.now(), emprestimo.getDataEmprestimo());
+        assertEquals(LocalDate.now().plusDays(3), emprestimo.getDataDevolucao());
+    }
+
+    @Test
+    void quandoMetodoNovoForChamadoComClienteDeReputaçãoRuimDeveRetornarUmEmprestimoComDevolucaoParaUmDia() {
+        var emprestimoService = new EmprestimoService();
+        var cliente = new Cliente(1L, "Cliente teste", LocalDate.now(), "123.123.123-11", Reputacao.RUIM);
+        var autor = new Autor(1L, "Autor teste", LocalDate.now(), null);
+        var obra = new Obra(1L, "Obra teste", 100, Tipo.LIVRO, autor);
+
+        var emprestimo = emprestimoService.novo(cliente, List.of(obra));
+
+        assertEquals(LocalDate.now().plusDays(1), emprestimo.getDataDevolucao());
+    }
+
+    @Test
+    void quandoMetodoNovoForChamadoComClienteDeReputaçãoRegularDeveRetornarUmEmprestimoComDevolucaoParaTresDia() {
+        var emprestimoService = new EmprestimoService();
+        var cliente = new Cliente(1L, "Cliente teste", LocalDate.now(), "123.123.123-11", Reputacao.REGULAR);
+        var autor = new Autor(1L, "Autor teste", LocalDate.now(), null);
+        var obra = new Obra(1L, "Obra teste", 100, Tipo.LIVRO, autor);
+
+        var emprestimo = emprestimoService.novo(cliente, List.of(obra));
+
+        assertEquals(LocalDate.now().plusDays(3), emprestimo.getDataDevolucao());
+    }
+
+    @Test
+    void quandoMetodoNovoForChamadoComClienteDeReputaçãoBoaDeveRetornarUmEmprestimoComDevolucaoParaCincoDia() {
+        var emprestimoService = new EmprestimoService();
+        var cliente = new Cliente(1L, "Cliente teste", LocalDate.now(), "123.123.123-11", Reputacao.BOA);
+        var autor = new Autor(1L, "Autor teste", LocalDate.now(), null);
+        var obra = new Obra(1L, "Obra teste", 100, Tipo.LIVRO, autor);
+
+        var emprestimo = emprestimoService.novo(cliente, List.of(obra));
+
+        assertEquals(LocalDate.now().plusDays(5), emprestimo.getDataDevolucao());
     }
 
 }
