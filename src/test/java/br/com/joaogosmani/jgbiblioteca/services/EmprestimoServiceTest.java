@@ -2,28 +2,34 @@ package br.com.joaogosmani.jgbiblioteca.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.joaogosmani.jgbiblioteca.builders.ClienteBuilder;
+import br.com.joaogosmani.jgbiblioteca.builders.EmprestimoBuilder;
 import br.com.joaogosmani.jgbiblioteca.builders.ObraBuilder;
+import br.com.joaogosmani.jgbiblioteca.dao.EmprestimoDAO;
 import br.com.joaogosmani.jgbiblioteca.enums.Reputacao;
 import br.com.joaogosmani.jgbiblioteca.models.Obra;
 
+@ExtendWith(MockitoExtension.class)
 public class EmprestimoServiceTest {
 
+    @Mock
+    private EmprestimoDAO emprestimoDAO;
+
+    @InjectMocks
     private EmprestimoService emprestimoService;
 
-    @BeforeEach
-    private void setUp() {
-        emprestimoService = new EmprestimoService();
-    }
-    
     @Test
     void quandoMetodoNovoForChamadoDeveRetornarUmEmprestimo() {
         var cliente = ClienteBuilder.builder().build();
@@ -93,6 +99,20 @@ public class EmprestimoServiceTest {
 
         var exception = assertThrows(IllegalArgumentException.class, () -> emprestimoService.novo(null, List.of(obra)));
         assertEquals(mensagemEsperada, exception.getMessage());
+    }
+
+    @Test
+    void quandoMetodoNotificarAtrasoForChamadoDeveRetornarONumeroDeNotificacoes() {
+        var emprestimos = List.of(
+            EmprestimoBuilder.builder().build(),
+            EmprestimoBuilder.builder().dataDevolucao(LocalDate.now().minusDays(1)).build()
+        );
+
+        when(emprestimoDAO.buscarTodos()).thenReturn(emprestimos);
+
+        var notificacoes = emprestimoService.notificarAtrasos();
+
+        assertEquals(1, notificacoes);
     }
 
 }
