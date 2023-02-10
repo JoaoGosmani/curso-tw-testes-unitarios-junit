@@ -2,6 +2,7 @@ package br.com.joaogosmani.jgbiblioteca.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -26,6 +27,9 @@ public class EmprestimoServiceTest {
 
     @Mock
     private EmprestimoDAO emprestimoDAO;
+
+    @Mock
+    private NotificacaoService notificacaoService;
 
     @InjectMocks
     private EmprestimoService emprestimoService;
@@ -110,9 +114,9 @@ public class EmprestimoServiceTest {
 
         when(emprestimoDAO.buscarTodos()).thenReturn(emprestimos);
 
-        var notificacoes = emprestimoService.notificarAtrasos();
+        emprestimoService.notificarAtrasos();
 
-        assertEquals(1, notificacoes);
+        verify(notificacaoService).notificar(emprestimos.get(1));
     }
 
 }

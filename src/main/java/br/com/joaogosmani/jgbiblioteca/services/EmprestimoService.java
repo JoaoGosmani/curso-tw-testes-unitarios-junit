@@ -12,8 +12,11 @@ public class EmprestimoService {
 
     private EmprestimoDAO emprestimoDAO;
 
-    public EmprestimoService(EmprestimoDAO emprestimoDAO) {
+    private NotificacaoService notificacaoService;
+
+    public EmprestimoService(EmprestimoDAO emprestimoDAO, NotificacaoService notificacaoService) {
         this.emprestimoDAO = emprestimoDAO;
+        this.notificacaoService = notificacaoService;
     }
     
     public Emprestimo novo(Cliente cliente, List<Obra> obras) {
@@ -39,8 +42,7 @@ public class EmprestimoService {
         return emprestimo;
     }
 
-    public int notificarAtrasos() {
-        var notificacoes = 0;
+    public void notificarAtrasos() {
         var hoje = LocalDate.now();
 
         var emprestimos = emprestimoDAO.buscarTodos();
@@ -48,11 +50,9 @@ public class EmprestimoService {
         for (Emprestimo emprestimo : emprestimos) {
             var estaAtrasado = emprestimo.getDataDevolucao().isBefore(hoje);
             if (estaAtrasado) {
-                notificacoes++;
+                notificacaoService.notificar(emprestimo);
             }
         }
-
-        return notificacoes;
     }
 
 }
